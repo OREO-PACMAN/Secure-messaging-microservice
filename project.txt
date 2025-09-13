@@ -1,0 +1,112 @@
+# generate a self signed cirtificate
+mkdir secure_app
+cd secure_app
+
+# make certs
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
+
+# Write minimal HTTPS Flask app
+nano app.py
+
+from flask import Flask
+
+# inside app.py
+from flask import Flask, request, jsonify
+import sqlite3
+from cryptography.fernet import Fernet
+
+app = Flask(__name__)
+
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+@app.route("/send", methods=["POST"])
+def send():
+    data = request.json
+    user = data["user"]
+    message = data["message"].encode()
+
+    encrypted = cipher.encrypt(message)
+
+    conn = sqlite3.connect("messages.db")
+    c = conn.cursor()
+    c.execute("INSERT INTO messages (user, message) VALUES (?, ?)", (user, encrypted))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": "Message stored securely"})
+
+@app.route("/receive", methods=["GET"])
+def receive():
+    user = request.args.get("user")
+
+    conn = sqlite3.connect("messages.db")
+    c = conn.cursor()
+    c.execute("SELECT message FROM messages WHERE user=?", (user,))
+    rows = c.fetchall()
+    conn.close()
+
+    decrypted = [cipher.decrypt(row[0]).decode() for row in rows]
+
+    return jsonify({"messages": decrypted})
+
+if __name__ == "__main__":
+    app.run(ssl_context=("cert.pem", "key.pem"))
+
+# Setup SQLite + Encryption
+# create nano file db_setup.py
+import sqlite3
+
+# Create database + table
+conn = sqlite3.connect("messages.db")
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS messages
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user TEXT,
+              message BLOB)''')
+conn.commit()
+conn.close()
+
+# run once
+python db_setup.py
+
+# create a vritual environment
+python -m venv venv
+
+# run it
+source venv/bin/activate
+
+# install flask+criptography inside the venv
+pip install flask cryptography
+
+# run app
+python app.py
+
+# open another terminal to send message
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"user":"alice","message":"BL4CK_V0R73X Pyaluga"}' \
+    https://localhost:5000/send -k
+
+# Retrieve messages:
+curl -X GET "https://localhost:5000/receive?user=bob" -k
+
+
+
+
+# 
+# on two pc
+#Run Flask on your machine’s IP
+#modify your app.run() in app.py
+app.run(host="0.0.0.0", port=5000, ssl_context=("cert.pem", "key.pem"))
+
+# Find your IP
+ip addr show
+
+# From another PC
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"user":"alice","message":"Hello from another PC"}' \
+    https://192.168.1.50:5000/send -k
+
+#from our pc 
+curl -X GET "https://192.168.1.50:5000/receive?user=alice" -k
+

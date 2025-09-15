@@ -1,8 +1,3 @@
-Here’s a suggested **README.md** for your **Secure-messaging-microservice** repo. You can adjust parts as needed (features, setup, usage etc.). Let me know if you want me to flesh out any section.
-
----
-
-````markdown
 # Secure Messaging Microservice
 
 A microservice for secure message handling, intended to provide confidentiality, integrity, and reliable storage for messages.  
@@ -190,31 +185,19 @@ Describe your DB tables, fields etc. For example:
 
 ---
 
-## License
-
-Specify license. For example:
-
-```
-MIT License
-```
-
 ---
 
 ## Authors / Contributors
 
-* **OREO-PACMAN / OREO** — project owner / initial author
-* Others…
+* **OREO-PACMAN / OREO** — project owner 
 
 ---
 
 ## Contact
 
-For questions / feedback: your email or contact method.
+For questions / dharshan.oreo26@gmail.com
 
 ```
 
 ---
 
-If you want, I can generate a more specific README by reading your code (app.py, db_setup.py etc.) and extracting actual endpoints, config names etc. Do you want me to do that?
-::contentReference[oaicite:0]{index=0}
-```

@@ -66,48 +66,46 @@ Before you begin, make sure you have:
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/OREO-PACMAN/Secure-messaging-microservice.git
-   cd Secure-messaging-microservice
-````
+      git clone https://github.com/OREO-PACMAN/Secure-messaging-microservice.git
+      cd Secure-messaging-microservice
+   ```
 
 2. (Optional) Create & activate a virtual environment:
 
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate
+      python3 -m venv venv
+   s   ource venv/bin/activate
    ```
 
 3. Install dependencies:
 
    ```bash
-   pip install -r requirements.txt
+      pip install -r requirements.txt
    ```
-
+   
 4. Initialize the database:
 
    ```bash
-   python db_setup.py
+      python db_setup.py
    ```
 
 5. Run the application:
 
    ```bash
-   python app.py
+      python app.py
    ```
-
----
-
+   
 ## Configuration
 
 * If there are environment variables, configuration files, credentials etc., describe them here.
   For example:
 
   ```
-  DB_HOST=...
-  DB_PORT=...
-  DB_USER=...
-  DB_PASS=...
-  SECRET_KEY=...
+     DB_HOST=...
+     DB_PORT=...
+     DB_USER=...
+     DB_PASS=...
+     SECRET_KEY=...
   ```
 
 ---
@@ -163,7 +161,7 @@ Describe your DB tables, fields etc. For example:
 * Example:
 
   ```bash
-  pytest
+     pytest
   ```
 
 * Test cases could include:

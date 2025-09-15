@@ -195,7 +195,5 @@ Describe your DB tables, fields etc. For example:
 
 For questions / dharshan.oreo26@gmail.com
 
-```
-
 ---
 
